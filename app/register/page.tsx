@@ -3,16 +3,68 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import Button from '@mui/material/Button';
+import { useRouter } from 'next/navigation';
 
 import Input from '@/components/Input';
+import { registerUser } from '@/utils/api';
 
 import styles from './register.module.scss';
 
 export default function RegisterPage() {
   const [currentStep, setCurrentStep] = useState(1);
+  const [formData, setFormData] = useState({
+    username: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+    firstName: '',
+    lastName: '',
+    phoneNumber: '',
+    address: '',
+  });
+  const [error, setError] = useState('');
+  const router = useRouter();
 
-  const goToNextStep = () => setCurrentStep((prev) => prev + 1);
-  const goToPreviousStep = () => setCurrentStep((prev) => prev - 1);
+  const handleInputChange = (field: string, value: string) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const goToNextStep = () => {
+    if (currentStep === 1) {
+      // Валидация паролей
+      if (formData.password !== formData.confirmPassword) {
+        setError('Passwords do not match');
+        return;
+      }
+    }
+    setError('');
+    setCurrentStep((prev) => prev + 1);
+  };
+
+  const goToPreviousStep = () => {
+    setCurrentStep((prev) => prev - 1);
+  };
+
+  const handleSubmit = async () => {
+    setError('');
+    try {
+      // Отправка данных в API
+      await registerUser({
+        username: formData.username,
+        email: formData.email,
+        password: formData.password,
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        phoneNumber: formData.phoneNumber,
+        address: formData.address,
+      });
+
+      alert('Registration successful!');
+      router.push('/login'); // Редирект на страницу логина
+    } catch (err: any) {
+      setError(err.message || 'An error occurred during registration.');
+    }
+  };
 
   return (
     <div className={styles.container}>
@@ -34,7 +86,6 @@ export default function RegisterPage() {
           {/* Прогресс этапов */}
           <div className={styles.steps}>
             <div className={styles.steps__wrapper}>
-              {/* Первый этап */}
               <div
                 className={`${styles.step} ${currentStep >= 1 && styles.completed}`}
               >
@@ -46,13 +97,9 @@ export default function RegisterPage() {
                   <p>Account Details</p>
                 </div>
               </div>
-              {/* Линия */}
               <div
-                className={`${styles.step__line} ${
-                  currentStep > 1 ? styles.activeLine : ''
-                }`}
+                className={`${styles.step__line} ${currentStep > 1 ? styles.activeLine : ''}`}
               ></div>
-              {/* Второй этап */}
               <div
                 className={`${styles.step} ${currentStep === 2 && styles.active}`}
               >
@@ -65,19 +112,42 @@ export default function RegisterPage() {
             </div>
           </div>
 
+          {/* Ошибка */}
+          {error && <p className={styles.form__error}>{error}</p>}
+
           {/* Формы */}
           {currentStep === 1 && (
             <form className={styles.form__fields}>
-              <div className={styles.form__container}>
-                <h2 className={styles.form__container__title}>
-                  Account Information
-                </h2>
-                <p>Enter Your Account Details</p>
-              </div>
-              <Input label="Username" type="text" required />
-              <Input label="Email" type="email" required />
-              <Input label="Password" type="password" required />
-              <Input label="Confirm Password" type="password" required />
+              <Input
+                label="Username"
+                type="text"
+                required
+                value={formData.username}
+                onChange={(e) => handleInputChange('username', e.target.value)}
+              />
+              <Input
+                label="Email"
+                type="email"
+                required
+                value={formData.email}
+                onChange={(e) => handleInputChange('email', e.target.value)}
+              />
+              <Input
+                label="Password"
+                type="password"
+                required
+                value={formData.password}
+                onChange={(e) => handleInputChange('password', e.target.value)}
+              />
+              <Input
+                label="Confirm Password"
+                type="password"
+                required
+                value={formData.confirmPassword}
+                onChange={(e) =>
+                  handleInputChange('confirmPassword', e.target.value)
+                }
+              />
               <div className={styles.actions}>
                 <Button
                   variant="outlined"
@@ -102,42 +172,36 @@ export default function RegisterPage() {
 
           {currentStep === 2 && (
             <form className={styles.form__fields}>
-              <div className={styles.form__container}>
-                <h2 className={styles.form__container__title}>
-                  Personal Information
-                </h2>
-                <p className={styles.form__container__description}>
-                  Enter Your Personal Information
-                </p>
-              </div>
-              <Input label="First Name" type="text" required />
-              <Input label="Last Name" type="text" required />
+              <Input
+                label="First Name"
+                type="text"
+                required
+                value={formData.firstName}
+                onChange={(e) => handleInputChange('firstName', e.target.value)}
+              />
+              <Input
+                label="Last Name"
+                type="text"
+                required
+                value={formData.lastName}
+                onChange={(e) => handleInputChange('lastName', e.target.value)}
+              />
               <Input
                 label="Mobile"
                 type="tel"
-                mask={[
-                  '+',
-                  '7',
-                  ' ',
-                  '(',
-                  /\d/,
-                  /\d/,
-                  /\d/,
-                  ')',
-                  ' ',
-                  /\d/,
-                  /\d/,
-                  /\d/,
-                  '-',
-                  /\d/,
-                  /\d/,
-                  '-',
-                  /\d/,
-                  /\d/,
-                ]}
                 required
+                value={formData.phoneNumber}
+                onChange={(e) =>
+                  handleInputChange('phoneNumber', e.target.value)
+                }
               />
-              <Input label="Address" type="text" required />
+              <Input
+                label="Address"
+                type="text"
+                required
+                value={formData.address}
+                onChange={(e) => handleInputChange('address', e.target.value)}
+              />
               <div className={styles.actions}>
                 <Button
                   variant="contained"
@@ -152,6 +216,7 @@ export default function RegisterPage() {
                   color="success"
                   endIcon={<i className="ri-check-line"></i>}
                   className={styles.submitButton}
+                  onClick={handleSubmit}
                 >
                   Submit
                 </Button>
