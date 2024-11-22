@@ -103,7 +103,9 @@ export default function RegisterPage() {
           {currentStep === 2 && (
             <form className={styles.form__fields}>
               <div className={styles.form__container}>
-                <h2 className={styles.form__container__title}>Personal Information</h2>
+                <h2 className={styles.form__container__title}>
+                  Personal Information
+                </h2>
                 <p className={styles.form__container__description}>
                   Enter Your Personal Information
                 </p>

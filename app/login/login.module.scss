@@ -18,7 +18,7 @@ $text-color: #6c757d;
     position: relative;
     background-position: center;
     background-image: url('/images/pages/auth-v1-mask-light.png');
-    
+
     &-tree {
       position: absolute;
       bottom: 20px;
@@ -35,7 +35,7 @@ $text-color: #6c757d;
 
     .form {
       width: 100%;
-      max-width: 480px; 
+      max-width: 480px;
       text-align: center;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); // Лёгкая тень для выделения
       border-radius: 20px;
