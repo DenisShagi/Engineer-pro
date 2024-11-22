@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "format": "prettier --write .",
+    "lint:css": "stylelint '**/*.{css,scss}'"
   },
   "dependencies": {
     "@emotion/cache": "^11.13.5",
@@ -45,6 +47,8 @@
     "postcss-styled-syntax": "^0.7.0",
     "prettier": "^3.3.3",
     "stylelint": "^16.10.0",
+    "stylelint-config-standard": "^36.0.1",
+    "stylelint-config-tailwindcss": "^0.0.7",
     "stylelint-use-logical-spec": "^5.0.1",
     "tailwindcss": "^3.4.15",
     "tailwindcss-logical": "^3.0.1",
