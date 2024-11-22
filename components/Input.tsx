@@ -6,6 +6,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import MaskedInput from 'react-text-mask';
 
 interface InputProps {
   label: string; // Метка для инпута
@@ -15,6 +16,7 @@ interface InputProps {
   name?: string; // Имя для инпута (например, для форм)
   value?: string; // Значение инпута
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void; // Обработчик изменений
+  mask?: Array<string | RegExp>; // Маска для ввода
 }
 
 export default function Input({
@@ -25,6 +27,7 @@ export default function Input({
   name,
   value,
   onChange,
+  mask,
 }: InputProps) {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -33,28 +36,49 @@ export default function Input({
   };
 
   return (
-    <TextField
-      label={label}
-      variant="outlined"
-      type={type === 'password' && showPassword ? 'text' : type}
-      fullWidth={fullWidth}
-      required={required}
-      name={name}
-      value={value}
-      onChange={onChange}
-      InputProps={{
-        endAdornment: type === 'password' && (
-          <InputAdornment position="end">
-            <IconButton
-              onClick={handleTogglePasswordVisibility}
-              edge="end"
-              aria-label="toggle password visibility"
-            >
-              {showPassword ? <VisibilityOff /> : <Visibility />}
-            </IconButton>
-          </InputAdornment>
-        ),
-      }}
-    />
+    <>
+      {mask ? (
+        <MaskedInput
+          mask={mask}
+          value={value}
+          onChange={onChange}
+          render={(ref, props) => (
+            <TextField
+              {...props}
+              inputRef={ref}
+              label={label}
+              variant="outlined"
+              fullWidth={fullWidth}
+              required={required}
+              name={name}
+            />
+          )}
+        />
+      ) : (
+        <TextField
+          label={label}
+          variant="outlined"
+          type={type === 'password' && showPassword ? 'text' : type}
+          fullWidth={fullWidth}
+          required={required}
+          name={name}
+          value={value}
+          onChange={onChange}
+          InputProps={{
+            endAdornment: type === 'password' && (
+              <InputAdornment position="end">
+                <IconButton
+                  onClick={handleTogglePasswordVisibility}
+                  edge="end"
+                  aria-label="toggle password visibility"
+                >
+                  {showPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
+        />
+      )}
+    </>
   );
 }

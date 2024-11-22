@@ -16,8 +16,9 @@ $text-color: #6c757d;
     align-items: center;
     justify-content: center;
     position: relative;
-    background-color: #dfe3e5;
-
+    background-position: center;
+    background-image: url('/images/pages/auth-v1-mask-light.png');
+    
     &-tree {
       position: absolute;
       bottom: 20px;
@@ -26,20 +27,19 @@ $text-color: #6c757d;
   }
 
   &__right {
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #fff;
-  padding: 40px; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #fff;
+    padding: 40px;
 
     .form {
       width: 100%;
-    max-width: 480px; // Максимальная ширина формы
-    text-align: center;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); // Лёгкая тень для выделения
-    border-radius: 8px; // Закруглённые углы
-    padding: 40px 20px; // Внутренние отступы
+      max-width: 480px; 
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); // Лёгкая тень для выделения
+      border-radius: 20px;
+      padding: 40px 20px;
 
       &__logo {
         margin-bottom: 20px;
@@ -68,7 +68,6 @@ $text-color: #6c757d;
         align-items: center;
 
         &__forgot-password {
-
           color: $primary-color;
           text-decoration: none;
 
@@ -99,7 +98,6 @@ $text-color: #6c757d;
         &__register-link {
           color: $primary-color;
           text-decoration: none;
-
 
           &:hover {
             text-decoration: underline;

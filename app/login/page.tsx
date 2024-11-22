@@ -47,8 +47,7 @@ export default function LoginPage() {
       {/* Правая часть с формой */}
       <div className={styles.container__right}>
         <div className={styles.form}>
-
-          <h1 className={styles.form__title}>Welcome to Materio! 👋</h1>
+          <h1 className={styles.form__title}>Welcome to Tecnolog! 👋</h1>
           <p className={styles.form__subtitle}>
             Please sign-in to your account and start the adventure
           </p>
