@@ -1,0 +1,111 @@
+// Переменные
+$primary-color: rgb(126, 78, 229);
+$primary-hover-color: rgb(106, 58, 209);
+$background-color: #f5f5f5;
+$text-color: #6c757d;
+
+// Корневой контейнер
+.container {
+  display: flex;
+  height: 100vh;
+  background-color: $background-color;
+
+  &__left {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    background-color: #dfe3e5;
+
+    &-tree {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+    }
+  }
+
+  &__right {
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #fff;
+  padding: 40px; 
+
+    .form {
+      width: 100%;
+    max-width: 480px; // Максимальная ширина формы
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); // Лёгкая тень для выделения
+    border-radius: 8px; // Закруглённые углы
+    padding: 40px 20px; // Внутренние отступы
+
+      &__logo {
+        margin-bottom: 20px;
+      }
+
+      &__title {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 8px;
+      }
+
+      &__subtitle {
+        color: $text-color;
+        margin-bottom: 20px;
+      }
+
+      &__fields {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      &__options {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        &__forgot-password {
+
+          color: $primary-color;
+          text-decoration: none;
+
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+      }
+
+      &__button {
+        margin-top: 16px;
+        background-color: $primary-color;
+        color: #fff;
+        text-transform: none;
+        font-weight: 500;
+        font-size: 16px;
+
+        &:hover {
+          background-color: $primary-hover-color;
+        }
+      }
+
+      &__register {
+        margin-top: 16px;
+        font-size: 14px;
+        color: $text-color;
+
+        &__register-link {
+          color: $primary-color;
+          text-decoration: none;
+
+
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+      }
+    }
+  }
+}
