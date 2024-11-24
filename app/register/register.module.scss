@@ -1,0 +1,157 @@
+.container {
+  display: flex;
+  min-height: 100vh;
+
+  &__img {
+    margin-left: 80px;
+  }
+  &__left {
+    width: 420px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f4f5fa;
+  }
+
+  &__right {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #fff;
+
+    .form {
+      width: 700px;
+      padding: 20px;
+
+      &__container {
+        &__title {
+          font-size: 1.5rem;
+          font-weight: 500;
+        }
+      }
+
+      .steps {
+        margin-bottom: 24px;
+
+        &__wrapper {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+        }
+
+        .step {
+          display: flex;
+          gap: 8px;
+          margin-left: 10px;
+          align-items: center;
+
+          &__circle {
+            width: 32px;
+            height: 32px;
+            padding: 12px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #666;
+            border: 2px solid #e0e0e0;
+          }
+
+          &__text {
+            text-align: left;
+            margin-top: 8px;
+
+            span {
+              color: #333;
+            }
+
+            p {
+              display: inline-flex;
+              font-size: 14px;
+              color: #666;
+            }
+          }
+
+          &.active .step__circle {
+            background-color: rgb(126, 78, 229);
+            color: white;
+            border-color: rgb(126, 78, 229);
+          }
+
+          &.completed .step__circle {
+            background-color: rgb(126, 78, 229);
+            color: white;
+          }
+        }
+
+        .step__line {
+          display: flex;
+          height: 3px;
+          width: 100%;
+          background-color: #e0e0e0;
+
+          &.activeLine {
+            background-color: rgb(126, 78, 229);
+          }
+        }
+      }
+
+      .form__fields {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+
+        h1 {
+          font-size: 24px;
+          font-weight: bold;
+        }
+
+        p {
+          font-size: 14px;
+          color: #666;
+        }
+      }
+
+      .actions {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 16px;
+
+        .previousButton {
+          background-color: rgb(126, 78, 229);
+          color: #fff;
+
+          &:hover {
+            background-color: rgb(106, 58, 209);
+          }
+
+          &:disabled {
+            background-color: transparent;
+            color: #aaa;
+            border: 1px solid #aaa;
+          }
+        }
+
+        .nextButton {
+          background-color: rgb(126, 78, 229);
+          color: #fff;
+
+          &:hover {
+            background-color: rgb(106, 58, 209);
+          }
+        }
+
+        .submitButton {
+          background-color: #4caf50;
+          color: #fff;
+
+          &:hover {
+            background-color: #43a047;
+          }
+        }
+      }
+    }
+  }
+}
