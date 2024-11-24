@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Button from '@mui/material/Button';
@@ -9,7 +9,9 @@ import Link from 'next/link';
 import Checkbox from '@mui/material/Checkbox';
 import { styled } from '@mui/material/styles';
 
-import Input from '@/components/Input'; // Универсальный инпут
+import Input from '@/components/Input';
+import { loginUser } from '@/utils/api';
+import { saveToken, getToken } from '@/utils/auth';
 
 import styles from './login.module.scss';
 
@@ -33,6 +35,14 @@ export default function LoginPage() {
   const [error, setError] = useState(''); // Общее сообщение об ошибке
   const [hasError, setHasError] = useState(false); // Флаг наличия ошибки
   const router = useRouter();
+
+  useEffect(() => {
+    const token = getToken();
+
+    if (token) {
+      router.push('/dashboard');
+    }
+  }, [router]);
 
   const sanitizeInput = (value: string): string => {
     // Удаляем русские буквы
@@ -61,34 +71,17 @@ export default function LoginPage() {
     }
 
     try {
-      const response = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, password }),
-      });
+      const data = await loginUser({ email, password });
+      console.log('Login successful:', data);
 
-      const data = await response.json();
+      const { token } = data;
 
-      if (response.ok) {
-        const { token } = data;
+      // Сохраняем токен с использованием функции saveToken
+      saveToken(token, rememberMe);
 
-        // Сохраняем токен
-        if (rememberMe) {
-          localStorage.setItem('token', token);
-        } else {
-          sessionStorage.setItem('token', token);
-        }
-
-        // Редирект на Dashboard
-        console.log('Redirecting to dashboard...');
-        router.push('/dashboard');
-      } else {
-        // Неверный email или пароль
-        setError('Incorrect email or password.');
-        setHasError(true);
-      }
+      // Редирект на Dashboard
+      console.log('Redirecting to dashboard...');
+      router.push('/dashboard');
     } catch (err: any) {
       setError(err.message || 'An error occurred during login.');
       setHasError(true);

@@ -1,19 +1,20 @@
+// app/dashboard/page.tsx
+
 'use client';
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { fetchCurrentUser } from '@/utils/api';
+import { getToken, removeToken } from '@/utils/auth';
 
 export default function DashboardPage() {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<any>(null);
   const [error, setError] = useState('');
   const router = useRouter();
 
   useEffect(() => {
-    // Получаем токен из localStorage или sessionStorage
-    const token =
-      localStorage.getItem('token') || sessionStorage.getItem('token');
+    const token = getToken();
 
     if (!token) {
       router.push('/login');
@@ -26,6 +27,7 @@ export default function DashboardPage() {
         setUser(userData);
       } catch (err: any) {
         setError(err.message);
+        removeToken();
         router.push('/login');
       }
     };
@@ -46,6 +48,15 @@ export default function DashboardPage() {
       <h1>Welcome, {user.firstName}!</h1>
       <p>Email: {user.email}</p>
       <p>Username: {user.username}</p>
+      {/* Добавим кнопку выхода */}
+      <button
+        onClick={() => {
+          removeToken();
+          router.push('/login');
+        }}
+      >
+        Log Out
+      </button>
     </div>
   );
 }

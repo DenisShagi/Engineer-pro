@@ -5,6 +5,12 @@ import { prisma } from '@/lib/prisma';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret_key';
 
+if (!JWT_SECRET) {
+  throw new Error(
+    'JWT_SECRET is not defined. Please add it to your .env file.',
+  );
+}
+
 export async function GET(request: Request) {
   const authHeader = request.headers.get('authorization');
 

@@ -15,7 +15,10 @@ export async function middleware(request: NextRequest) {
     jwt.verify(token, JWT_SECRET);
     return NextResponse.next(); // Если токен валиден, пропускаем запрос
   } catch (error) {
-    return NextResponse.json({ error: 'Invalid or expired token' }, { status: 401 });
+    return NextResponse.json(
+      { error: 'Invalid or expired token' },
+      { status: 401 },
+    );
   }
 }
 

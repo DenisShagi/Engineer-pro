@@ -7,6 +7,7 @@ export async function registerUser(data: {
   firstName: string;
   lastName: string;
   phoneNumber: string;
+  address: string;
 }) {
   const response = await fetch(`${API_BASE_URL}/register`, {
     method: 'POST',
@@ -42,7 +43,7 @@ export async function loginUser(data: { email: string; password: string }) {
 }
 
 export async function fetchCurrentUser(token: string) {
-  const response = await fetch('/api/users/me', {
+  const response = await fetch(`${API_BASE_URL}/me`, {
     method: 'GET',
     headers: {
       Authorization: `Bearer ${token}`,
@@ -54,5 +55,6 @@ export async function fetchCurrentUser(token: string) {
     throw new Error(error.error || 'Failed to fetch user');
   }
 
-  return response.json();
+  const data = await response.json();
+  return data.user;
 }
