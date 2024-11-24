@@ -10,7 +10,6 @@ import Checkbox from '@mui/material/Checkbox';
 import { styled } from '@mui/material/styles';
 
 import Input from '@/components/Input'; // Универсальный инпут
-import { loginUser } from '@/utils/api'; // Функция для API-запроса
 
 import styles from './login.module.scss';
 
@@ -26,30 +25,73 @@ const CustomCheckbox = styled(Checkbox)(({ theme }) => ({
 }));
 
 export default function LoginPage() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+  });
   const [rememberMe, setRememberMe] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState(''); // Общее сообщение об ошибке
+  const [hasError, setHasError] = useState(false); // Флаг наличия ошибки
   const router = useRouter();
+
+  const sanitizeInput = (value: string): string => {
+    // Удаляем русские буквы
+    return value.replace(/[А-Яа-яЁё]/g, '');
+  };
+
+  const handleInputChange = (field: string, value: string) => {
+    const sanitizedValue = sanitizeInput(value);
+    setFormData((prev) => ({ ...prev, [field]: sanitizedValue }));
+    setHasError(false); // Сбрасываем состояние ошибки при изменении ввода
+    setError('');
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    setHasError(false);
+
+    const { email, password } = formData;
+
+    // Базовая валидация
+    if (!email || !password) {
+      setError('Please enter your email and password.');
+      setHasError(true);
+      return;
+    }
 
     try {
-      const { token } = await loginUser({ email, password });
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
 
-      // Сохраняем токен
-      if (rememberMe) {
-        localStorage.setItem('token', token);
+      const data = await response.json();
+
+      if (response.ok) {
+        const { token } = data;
+
+        // Сохраняем токен
+        if (rememberMe) {
+          localStorage.setItem('token', token);
+        } else {
+          sessionStorage.setItem('token', token);
+        }
+
+        // Редирект на Dashboard
+        console.log('Redirecting to dashboard...');
+        router.push('/dashboard');
       } else {
-        sessionStorage.setItem('token', token);
+        // Неверный email или пароль
+        setError('Incorrect email or password.');
+        setHasError(true);
       }
-
-      // Редирект на Dashboard
-      router.push('/dashboard');
     } catch (err: any) {
       setError(err.message || 'An error occurred during login.');
+      setHasError(true);
     }
   };
 
@@ -81,26 +123,28 @@ export default function LoginPage() {
             Please sign-in to your account and start the adventure
           </p>
 
-          {/* Вывод ошибок */}
-          {error && <p className={styles.form__error}>{error}</p>}
-
           <form className={styles.form__fields} onSubmit={handleSubmit}>
             {/* Поле Email */}
             <Input
               label="Email"
               type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              value={formData.email}
+              onChange={(e) => handleInputChange('email', e.target.value)}
               required
+              error={hasError}
+              inputProps={{ lang: 'en' }}
             />
 
             {/* Поле Password */}
             <Input
               label="Password"
               type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              value={formData.password}
+              onChange={(e) => handleInputChange('password', e.target.value)}
               required
+              error={hasError}
+              helperText={error} // Сообщение об ошибке под вторым инпутом
+              inputProps={{ lang: 'en' }}
             />
 
             {/* Чекбокс и ссылка "Forgot password" */}

@@ -1,23 +1,35 @@
+// app/api/auth/register/route.ts
+
 import { NextResponse } from 'next/server';
 import bcrypt from 'bcryptjs';
 
-import { prisma } from '@/lib/prisma'; // Подключаем Prisma Client
+import { prisma } from '@/lib/prisma';
 
 export async function POST(request: Request) {
   try {
     const body = await request.json();
 
-    const { email, username, password, firstName, lastName, phoneNumber } =
-      body;
+    const {
+      email,
+      username,
+      password,
+      firstName,
+      lastName,
+      phoneNumber,
+      address,
+    } = body;
 
-    // Проверяем, что все обязательные данные есть
+    // Удаляем все нецифровые символы из номера телефона
+    const rawPhoneNumber = phoneNumber.replace(/\D/g, '');
+
     if (
       !email ||
       !username ||
       !password ||
       !firstName ||
       !lastName ||
-      !phoneNumber
+      !rawPhoneNumber ||
+      !address
     ) {
       return NextResponse.json(
         { error: 'All fields are required.' },
@@ -25,24 +37,10 @@ export async function POST(request: Request) {
       );
     }
 
-    // Проверяем, существует ли пользователь с таким email или username
-    const existingUser = await prisma.users.findFirst({
-      where: {
-        OR: [{ email }, { username }],
-      },
-    });
-
-    if (existingUser) {
-      return NextResponse.json(
-        { error: 'User with this email or username already exists.' },
-        { status: 400 },
-      );
-    }
-
     // Хэшируем пароль
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Создаём нового пользователя
+    // Создаём нового пользователя с обработанным номером телефона
     const newUser = await prisma.users.create({
       data: {
         email,
@@ -50,7 +48,8 @@ export async function POST(request: Request) {
         password: hashedPassword,
         firstName,
         lastName,
-        phoneNumber,
+        phoneNumber: rawPhoneNumber,
+        address,
       },
     });
 

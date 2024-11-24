@@ -1,3 +1,5 @@
+// app/api/auth/login/route.ts
+
 import { NextResponse } from 'next/server';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
@@ -7,9 +9,11 @@ import { prisma } from '@/lib/prisma'; // Подключаем Prisma Client
 const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret_key'; // Секрет для токена
 
 if (!JWT_SECRET) {
-    throw new Error('JWT_SECRET is not defined. Please add it to your .env file.');
-  }
-  
+  throw new Error(
+    'JWT_SECRET is not defined. Please add it to your .env file.',
+  );
+}
+
 export async function POST(request: Request) {
   try {
     const body = await request.json();
@@ -28,8 +32,9 @@ export async function POST(request: Request) {
     });
 
     if (!user) {
+      // Email не существует
       return NextResponse.json(
-        { error: 'Invalid email or password.' },
+        { error: 'Incorrect email or password.', field: 'email' },
         { status: 401 },
       );
     }
@@ -38,8 +43,9 @@ export async function POST(request: Request) {
     const isPasswordValid = await bcrypt.compare(password, user.password);
 
     if (!isPasswordValid) {
+      // Пароль неверный
       return NextResponse.json(
-        { error: 'Invalid email or password.' },
+        { error: 'Incorrect password.', field: 'password' },
         { status: 401 },
       );
     }

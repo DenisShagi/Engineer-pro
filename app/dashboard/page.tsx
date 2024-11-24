@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+
 import { fetchCurrentUser } from '@/utils/api';
 
 export default function DashboardPage() {
@@ -10,7 +11,9 @@ export default function DashboardPage() {
   const router = useRouter();
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    // Получаем токен из localStorage или sessionStorage
+    const token =
+      localStorage.getItem('token') || sessionStorage.getItem('token');
 
     if (!token) {
       router.push('/login');
