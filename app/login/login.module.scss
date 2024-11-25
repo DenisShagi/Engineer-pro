@@ -98,6 +98,7 @@ $text-color: #6c757d;
         &__register-link {
           color: $primary-color;
           text-decoration: none;
+          text-underline-offset: 3px;
 
           &:hover {
             text-decoration: underline;

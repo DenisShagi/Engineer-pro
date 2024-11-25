@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
 import Image from 'next/image';
 import Button from '@mui/material/Button';
 import { useRouter } from 'next/navigation';
@@ -404,6 +405,11 @@ export default function RegisterPage() {
                   Next
                 </Button>
               </div>
+              <span>
+              Already have an account? 
+              <Link className={styles.login__line} href='./login'>Log in</Link>
+              </span>
+              
             </form>
           )}
 

@@ -7,6 +7,9 @@ module.exports = {
     './styles/**/*.{css}', // Если у вас есть глобальные CSS
   ],
   theme: {
+    colors: {
+      'violet': 'rgb(126, 78, 229)',
+    },
     extend: {},
   },
   plugins: [],
