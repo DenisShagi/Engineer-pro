@@ -1,0 +1,18 @@
+.dashboard {
+  display: flex;
+  height: 100vh;
+
+  .content {
+    flex-grow: 1;
+    transition: margin-left 0.3s;
+    padding: 16px;
+
+    &.expanded {
+      margin-left: 240px;
+    }
+
+    &.collapsed {
+      margin-left: 60px;
+    }
+  }
+}
