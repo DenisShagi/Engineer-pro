@@ -1,0 +1,25 @@
+.programs {
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+  
+    .programList {
+      list-style: none;
+      padding: 0;
+  
+      li {
+        margin-bottom: 0.5rem;
+  
+        a {
+          text-decoration: none;
+          color: #673ab7;
+  
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+      }
+    }
+  }
+  

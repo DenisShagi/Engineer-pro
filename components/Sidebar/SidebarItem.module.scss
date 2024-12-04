@@ -1,0 +1,46 @@
+.item {
+  display: flex;
+  flex-direction: column;
+
+  .link,
+  .expandable {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    text-decoration: none;
+    color: #333;
+
+    .icon {
+      margin-right: 1.5rem; /* Увеличено расстояние между иконкой и текстом */
+    }
+
+    &:hover {
+      background: #f0f0f0;
+    }
+  }
+
+  &.active .expandable {
+    background: #ede7f6;
+    color: #673ab7;
+  }
+
+  .subMenu {
+    list-style: none;
+    padding-left: 1.5rem;
+
+    .subLink {
+      padding: 0.5rem 1rem;
+      display: block;
+      text-decoration: none;
+      color: #555;
+
+      &:hover {
+        color: #000;
+      }
+    }
+  }
+
+  .arrow {
+    margin-left: auto;
+  }
+}
